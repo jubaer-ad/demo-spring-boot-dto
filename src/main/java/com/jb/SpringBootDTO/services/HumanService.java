@@ -1,5 +1,6 @@
 package com.jb.SpringBootDTO.services;
 
+import com.jb.SpringBootDTO.converters.HumanEntityToDto;
 import com.jb.SpringBootDTO.dtos.HumanAddressDTO;
 import com.jb.SpringBootDTO.entities.Human;
 import com.jb.SpringBootDTO.repositories.HumanRepository;
@@ -14,6 +15,9 @@ public class HumanService {
     @Autowired
     HumanRepository humanRepository;
 
+    @Autowired
+    HumanEntityToDto humanEntityToDto;
+
     public List<HumanAddressDTO> getAllHuman() {
         return humanRepository.findAll()
                 .stream()
@@ -23,14 +27,6 @@ public class HumanService {
 
     public HumanAddressDTO convertEntityToDTO (Human human) {
         HumanAddressDTO humanAddressDTO = new HumanAddressDTO();
-        humanAddressDTO.setHumanId(human.getId());
-        humanAddressDTO.setFirstName(human.getFirstName());
-        humanAddressDTO.setLastName(human.getLastName());
-        humanAddressDTO.setEmail(human.getEmail());
-        humanAddressDTO.setPlace(human.getAddress().getPlace());
-        humanAddressDTO.setLatitude(human.getAddress().getLatitude());
-        humanAddressDTO.setLongitude(human.getAddress().getLongitude());
-        return humanAddressDTO;
-
+        return humanEntityToDto.humanEntityToDto(human, humanAddressDTO);
     }
 }
